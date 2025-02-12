@@ -7,20 +7,23 @@ import action
 class mainappTk(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.model = Down(self)
-
+        frame = tk.Frame(self)
+        self.model = Down(frame)
         self.geometry('800x450')
-        self.a = OpenFile(self,label="ไฟล์ที่อยากจะปิด")
-        self.a.grid(padx=3,column=0,columnspan=10,row=0,sticky="w")
-        self.b = OpenFile(self,label="เก็บไฟล์",s=1)
-        self.b.grid(padx=3,column=0,columnspan=10,row=1,sticky="w")
+        self.a = OpenFile(frame,label="ไฟล์ที่อยากจะปิด")
+        self.a.grid(padx=3,column=0,row=0,sticky="w")
+        self.b = OpenFile(frame,label="เก็บไฟล์",s=1)
+        self.b.grid(padx=3,column=0,row=1,sticky="w")
 
         self.model.grid(column=0,row=2,sticky="wn")
 
-        self.button = tk.Button(self,text="start",command=self.start,width=20)
+        self.button = tk.Button(frame,text="start",command=self.start,width=20)
         self.button.grid(padx=3,column=0,row=3,sticky="wn")
-        self.log = LOG(self)
+        frame2 = tk.Frame(self)
+        self.log = LOG(frame2)
         self.log.grid(column=10,row=0,rowspan=20)
+        frame.pack(side="left",anchor="n")
+        frame2.pack()
     def doing(self,val,filename,savefiles,model,log):
         pdf = action.Pdf2Img(filename=filename,log=self.log)
         pdf.run()
@@ -28,6 +31,8 @@ class mainappTk(tk.Tk):
         pr.run()
         sa = action.savepdf(pr.path(),savefolder=savefiles,log=log)
         sa.run()
+        clear =  action.Clear(pdf.path(),pr.path())
+        clear.clear()
     def start(self):    
         if(len(self.b.path())==0 or len(self.a.path())==0):
             tk.messagebox.showwarning(title="Error", message="เลือกไฟล์")

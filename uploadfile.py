@@ -39,7 +39,8 @@ class OpenFile(tk.Frame):
             title='Save File',
             initialdir='/',
             filetypes=filetypes)
-
+        if filename.endswith(".pdf") == False:
+            filename+=".pdf"
         self.barEntry.delete(0,tk.END)
         self.barEntry.insert(0,filename)
     def path(self)->str:

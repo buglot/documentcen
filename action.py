@@ -4,6 +4,7 @@ import log
 import uuid
 import cv2
 import img2pdf
+import shutil
 from ultralytics import YOLO
 import tkinter as tk
 from PIL import Image
@@ -26,7 +27,7 @@ class Pdf2Img:
             image.save(os.path.join(self.folder,f"output_{i:04d}.jpg"))
     def path(self)->str:
         return self.folder
-
+    
 class predict:
     def __init__(self,folder:str,val:float,model:str,log:log.LOG):
         self.model = YOLO(os.path.join("model",model))
@@ -87,9 +88,6 @@ class savepdf:
         self.savefolder = savefolder
         self.log = log
     def run(self): 
-        self.folder = str(uuid.uuid1())
-        if os.path.exists(self.folder)==False:
-            os.mkdir(self.folder)
         listimg = os.listdir(self.fl)
         self.log.add("เริ่มบีบอัดไฟล์\n")
         pdf = pdfium.PdfDocument.new()
@@ -104,4 +102,9 @@ class savepdf:
     def path(self)->str:
         return self.folder
     
-
+class Clear:
+    def __init__(self,*argfolder):
+        self.arg = argfolder
+    def clear(self):
+        for x in self.arg:
+            shutil.rmtree(x)

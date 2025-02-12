@@ -5,9 +5,9 @@ class LOG(tk.Frame):
         fr = tk.Frame(self)
         fr.pack()
         self.label = tk.Label(fr,text="LOG")
-        self.label.grid(column=0,row=0)
+        self.label.pack(anchor="w",side="left")
         self.log = tk.Text(self,width=50)
-        self.log.pack()
+        self.log.pack(fill="both",expand=True,anchor="center")
     def add(self,text):
         self.log.insert(tk.END,text)
         self.log.see(tk.END)
