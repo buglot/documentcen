@@ -9,10 +9,11 @@ from ultralytics import YOLO
 import tkinter as tk
 from PIL import Image
 class Pdf2Img:
-    def __init__(self,filename,log:log.LOG):
+    def __init__(self,filename,log:log.LOG,size:int):
         self.pdf = pdfium.PdfDocument(filename)
         self.log = log
         self.folder = ""
+        self.imgsize = size
     def size(self)->int:
         return len(self.pdf)
     def run(self):
@@ -23,7 +24,7 @@ class Pdf2Img:
         for i in range(self.size()):
             page = self.pdf[i]
             self.log.add(f"แตกเป็นภาพ{i+1:15d}\\{self.size()}\n")
-            image = page.render(scale=4).to_pil()
+            image = page.render(scale=self.imgsize).to_pil()
             image.save(os.path.join(self.folder,f"output_{i:04d}.jpg"))
     def path(self)->str:
         return self.folder
@@ -49,7 +50,7 @@ class predict:
 
             original_img = cv2.imread(os.path.join(self.fl,file))
             original_h, original_w = original_img.shape[:2]
-            resized_img = cv2.resize(original_img, (640, 640))
+            resized_img = cv2.resize(original_img, (640, 640), interpolation=cv2.INTER_LINEAR)
             self.log.add(f"กำลังcensoredภาพ {i+1:15d}\\{size}\n")
             results = self.model.predict(resized_img)
             for result in results:
